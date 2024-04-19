@@ -1,0 +1,99 @@
+1. Que patrón de diseño usa laravel
+
+R.- Modelo Vista Controlador
+
+2. Indica los pasos para hacer una consulta y el agregar en vuejs con blade desde la integración al blade
+R.-
+Para realizar una consulta
+Se debe de crear las APIs en el backend para que me devuelva los datos
+Se debe de importar la librería de vue en el front
+Se debe de crear un método que se conecte a la API y obtenga los datos
+Se debe de asignar esos datos a una variable ref
+Se debe de crear el template mostrando los datos que están en la variable ref
+
+Pasos para realizar un guardado
+Se debe de tener listo el método guardado en el backend
+Se debe de importar la librería de vue en el front
+Se debe de crear un modelo de datos
+Se debe de crear el formulario para recibir los datos del usuario
+Se debe de relacionar los inputs al modelo por medio de v-model
+Se debe de crer un método que se conecte a la API y envíe los datos del modelo
+
+
+3. Si tienes un esquema core con una tabla de usuarios, un esquema talento humano con una tabla de personas, en personas y usuarios hay el campo cedula,
+en personas tambien hay nombres apellidos telefono direccion y en usuarios hay  username , password y token.
+Escribe como serian los modelos y una consulta eloquent para darme los datos de la persona con el usuario autenticado.  
+
+R.-
+Modelo usuario
+class Usuario extends Model
+{
+    protected $table = 'core.usuario';
+    protected $fillable = [
+        'cedula',
+        'username',
+        'password',
+        'token',
+    ];
+}
+
+Modelo persona
+class Persona extends Model
+{
+    protected $table = 'talento_humano.persona';
+    protected $fillable = [
+        'cedula',
+        'nombres',
+        'apellidos',
+        'telefono',
+        'direccion',
+    ];
+}
+
+Consulta
+$query = Usuario::where('id', Auth::user()->id);
+$query->join('talento_humano.persona','usuario.cedula','=','talento_humano.persona.cedula');
+$query->select([
+    'talento_humano.persona.cedula',
+    'talento_humano.persona.nombres',
+    'talento_humano.persona.apellidos',
+    'talento_humano.persona.telefono',
+    'talento_humano.persona.direccion',
+    'core.usuario.username'
+]);
+$data = $query->get();
+
+4. Si tienes muchos registros, muchas tablas y tienes que hacer una consulta que una todas las tablas haga calculos matemáticos con los campos de las tablas
+y tenga que hacerse de manera diaria para mostrar un reporte al usuario en excel.
+Que solución darias para realizar este proyecto ?
+
+a.) Utilizar sp vista y una tarea programada que realice los calculos una vez al dia. 
+b.) Utilizar laravel con eloquent para crear las consultas cuando el usuario requiera.
+c.) Le diria al usuario que no existe solución.
+d.) Otra alternativa.
+
+Justifique la respuesta e indique las tecnologías que usuario y como lo haria de manera general?
+
+R.-
+Se puede realizar una vista con la data que se necesita.
+Se configure un cronjob diario a un prograa que ejecute todos los calculos matemáticos.
+Este programa puede estar en un lenguaje compilado. Ejemplo: C++, C#, Etc.
+Una vez realizados los cálculos se guardan los datos en la base de datos en una nueva tabla.
+El reporte consultaría directamente a esta nueva tabla con los resultados ya procesados.
+
+
+5. Si le dicen que quieren que haga un formulario con 20 campos que el usuario los pueda grabar y que otro usuario lo
+consulte, que tiempo daria para realizarlo? o en su defecto que responderia a la petición?
+
+R.- 
+Entre desarrollo de guardado y consulta de la tabla y pretendiendo
+que son campos sencillos sin ningún proceso o cálculo adicional
+no se debería de demorar más de 1 día
+
+
+6. Crea un proyecto en laravel 10 , implementa vuejs en el blade, integra la siguiente plantilla 
+https://adminlte.io/themes/v3/pages/calendar.html y realiza el crud de calendario que te permita agregar editar eliminar y consultar en el calendario
+los datos con datos que de una base postgresql.
+Nota: Utiliza postgresql con un esquema agenda y las tablas que requieras y no olvides que debe tener auditoria. 
+
+Entregar el proyecto en git al grupo de prueba.   
